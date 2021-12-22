@@ -1,8 +1,6 @@
 .include "cpctelera.h.s"
 .include "man/entity.h.s"
 
-;; add a comment
-
 .area _DATA
 .area _CODE
 
