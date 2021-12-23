@@ -8,7 +8,16 @@ sys_physics_init:
     ret
 
 sys_physics_update_one_entity: ;; update entity load in DE 
-    ;; TODO: implement update one entity
+    ld h, d
+    ld l, e
+    inc hl 
+    ld a, (hl) ;; load position x in A
+    inc hl 
+    inc hl 
+    add a, (hl) ;; add to A the velocity in x
+    dec hl 
+    dec hl 
+    ld (hl), a
     ret
 
 sys_physics_update:

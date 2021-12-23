@@ -58,9 +58,11 @@ man_entity_destroy: ;; should have in DE the entity ptr to be destory
     ret
 
 call_fnc_ptr: ;; call function ptr in HL destroys BC 
+    push hl ;; save the function pointer
     ld bc, #.+5
     push bc;; set return address
     jp (hl)
+    pop hl ;; recover the function pointer
     ret
 
 man_entity_for_all: ;; loop all valid entities and call the function saved in HL

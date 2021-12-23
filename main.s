@@ -12,7 +12,11 @@
 .globl man_entity_create
 .globl man_entity_destroy
 
+.globl sys_physics_init
 .globl sys_physics_update 
+
+.globl sys_render_init
+.globl sys_render_update 
 
 generate_star: ;; generate a default star
     call man_entity_create
@@ -26,7 +30,7 @@ generate_star: ;; generate a default star
     inc hl
     ld (hl), #-1 ;; TODO: set random xvel
     inc hl
-    ld (hl), #0xFF
+    ld (hl), #0xF0
     inc hl
     ld (hl), #0x00
     inc hl
@@ -44,5 +48,6 @@ entity_create_loop:
     jr nz, entity_create_loop
     
     call sys_physics_update 
+    call sys_render_update
 loop:
    jr    loop
