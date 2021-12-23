@@ -30,9 +30,9 @@ sys_render_update_one_entity: ;; update entity load in DE
     or a, #0x00 ;; check if the prev vmem is valid
     jr z, render_entity
     ;; the vmem is valid clear it
-    ld e, (hl)
-    dec hl
     ld d, (hl)
+    dec hl
+    ld e, (hl)
     ld a, #0x00
     ld (de), a
     render_entity: ;; render entitie

@@ -2,12 +2,14 @@
 .include "man/entity.h.s"
 
 .globl man_entity_for_all
+.globl man_entity_set4destruction
 
 sys_physics_init:
     ;; TODO: implement physics init code  
     ret
 
 sys_physics_update_one_entity: ;; update entity load in DE 
+    ;; TODO: check if the star need to be destroy
     ld h, d
     ld l, e
     inc hl 

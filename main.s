@@ -5,10 +5,12 @@
 .area _CODE
 
 .globl cpct_disableFirmware_asm
+.globl cpct_waitVSYNC_asm
 .globl cpct_memset_asm
 .globl cpct_memcpy_asm
 
 .globl man_entity_init
+.globl man_entity_update
 .globl man_entity_create
 .globl man_entity_destroy
 
@@ -37,6 +39,18 @@ generate_star: ;; generate a default star
     ld (hl), #0x00
     ret
 
+wait_vsync:
+    halt
+    halt
+    call cpct_waitVSYNC_asm
+    halt
+    halt
+    call cpct_waitVSYNC_asm
+    halt
+    halt
+    call cpct_waitVSYNC_asm
+    ret
+
 _main::
     call cpct_disableFirmware_asm
     call man_entity_init
@@ -45,9 +59,11 @@ _main::
 entity_create_loop:
     dec a
     call generate_star
-    jr nz, entity_create_loop
-    
+    jr nz, entity_create_loop   
+loop:
     call sys_physics_update 
     call sys_render_update
-loop:
-   jr    loop
+
+    call man_entity_update
+    call wait_vsync
+    jr    loop

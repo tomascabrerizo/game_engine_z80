@@ -10,6 +10,8 @@ entities:
     .db #0x00 ;; aditional zero byte at the end of the entity array
 next_free_entity:
     .dw #0x0000
+entity_count:
+    .db #0x00
 
 man_entity_init:
     ;; set all entities to invalid
@@ -24,6 +26,10 @@ man_entity_init:
 
 man_entity_create: ;; this function return the new entity ptr in DE 
     push af
+    ;; increment entity count
+    ld a, (#entity_count)
+    inc a
+    ld (#entity_count), a
     ld hl, (next_free_entity)
     ;; save in bc the new entity position
     ld d, h
@@ -40,6 +46,11 @@ man_entity_create: ;; this function return the new entity ptr in DE
     ret
 
 man_entity_destroy: ;; should have in DE the entity ptr to be destory
+    push af
+    ;; decrement entity count
+    ld a, (#entity_count)
+    dec a
+    ld (#entity_count), a
     ;; calculate the last entity position
     ld hl, (next_free_entity) ;; load the last entity in HL
     ld a, l
@@ -55,6 +66,7 @@ man_entity_destroy: ;; should have in DE the entity ptr to be destory
     pop hl ;; recover the last entity position
     ;; invalid the last entity
     ld (hl), #E_TYPE_INVALID
+    pop af
     ret
 
 call_fnc_ptr: ;; call function ptr in HL destroys BC 
@@ -83,4 +95,40 @@ man_entity_for_all: ;; loop all valid entities and call the function saved in HL
     ld d, a
     jr start_entity_loop
     end_entity_loop:
+    ret
+
+man_entity_set4destruction: ;; set de entity in DE to be destroy
+    ld a, (de)
+    or a, #E_TYPE_DEAD
+    ld (de), a
+    ret
+
+man_entity_update:
+    ld a, (#entity_count)
+    push af ;; save entity count
+    or a, #0x00  ;; checks entity count > 0
+    jr z, entity_update_end
+    ld de, #entities ;; load entities in DE
+    man_entity_update_loop: ;; loop all valid entities
+    ld a, (de)
+    and a, #E_TYPE_DEAD
+    jr z, entity_not_dead
+    call man_entity_destroy
+    jr man_entity_update_loop
+    ;; increment to the next entity
+    entity_not_dead:
+    ld a, e
+    add a, #ENTITY_SIZE
+    ld e, a
+    ld a, d
+    adc a, #0x00
+    ld d, a
+    ;; update entity count 
+    ld a, (#entity_count)
+    dec a
+    ld (#entity_count), a
+    jr nz, man_entity_update_loop
+    entity_update_end:
+    pop af
+    ld (#entity_count), a ;; recover entity count
     ret
