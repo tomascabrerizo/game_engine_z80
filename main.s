@@ -62,8 +62,8 @@ entity_create_loop:
     jr nz, entity_create_loop   
 loop:
     call sys_physics_update 
+    call man_entity_update
     call sys_render_update
 
-    call man_entity_update
     call wait_vsync
     jr    loop

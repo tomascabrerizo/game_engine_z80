@@ -59,11 +59,13 @@ man_entity_destroy: ;; should have in DE the entity ptr to be destory
     ld a, h
     sbc a, #0x00
     ld h, a
+    push de ;; save the entity position
     push hl ;; save the last entity position
     ;; copy the last entity in the destroy one
     ld bc, #ENTITY_SIZE 
     call cpct_memcpy_asm
     pop hl ;; recover the last entity position
+    pop de ;; recover the entity position
     ;; invalid the last entity
     ld (hl), #E_TYPE_INVALID
     pop af
@@ -104,31 +106,24 @@ man_entity_set4destruction: ;; set de entity in DE to be destroy
     ret
 
 man_entity_update:
-    ld a, (#entity_count)
-    push af ;; save entity count
-    or a, #0x00  ;; checks entity count > 0
-    jr z, entity_update_end
-    ld de, #entities ;; load entities in DE
-    man_entity_update_loop: ;; loop all valid entities
+    ld de, #entities
+    ;; check if the entity is valid
+    entity_loop:
     ld a, (de)
+    or a, #E_TYPE_INVALID
+    jr z, #entity_update_end 
     and a, #E_TYPE_DEAD
     jr z, entity_not_dead
     call man_entity_destroy
-    jr man_entity_update_loop
-    ;; increment to the next entity
+    jr entity_loop
     entity_not_dead:
+    ;; increment to the next entity
     ld a, e
     add a, #ENTITY_SIZE
     ld e, a
     ld a, d
     adc a, #0x00
     ld d, a
-    ;; update entity count 
-    ld a, (#entity_count)
-    dec a
-    ld (#entity_count), a
-    jr nz, man_entity_update_loop
+    jr #entity_loop
     entity_update_end:
-    pop af
-    ld (#entity_count), a ;; recover entity count
     ret

@@ -11,7 +11,7 @@
 ;; entity types
 E_TYPE_INVALID = 0x00
 E_TYPE_STAR    = 0x01
-E_TYPE_DEAD    = 0x7f
+E_TYPE_DEAD    = 0x80
 
 ;; create array for entities 
 ENTITY_SIZE = 7 ;; each entity use 7 bytes

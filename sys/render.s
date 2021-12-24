@@ -36,7 +36,7 @@ sys_render_update_one_entity: ;; update entity load in DE
     ld a, #0x00
     ld (de), a
     render_entity: ;; render entitie
-    ld de, #0xc000
+    ld de, #CPCT_VMEM_START_ASM
     call cpct_getScreenPtr_asm
     pop af
     ld (hl), a 
