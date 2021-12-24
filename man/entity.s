@@ -129,3 +129,9 @@ man_entity_update:
     jr #entity_loop
     entity_update_end:
     ret
+
+man_entity_free_space: ;; return A with the amount of space
+    ld a, (#entity_count)
+    ld b, a
+    ld a, #MAX_ENTITIES
+    sub a, b ;; the z bit is set if there is no space
