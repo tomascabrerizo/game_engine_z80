@@ -18,43 +18,55 @@ sys_render_update_one_entity: ;; update entity load in DE
     ld b, (hl) ;; load in B, y position
     inc hl
     inc hl
-    ld a, (hl) ;; load entity color in A
-    push af ;; save entity color
-    ;; clear the old vmem position 
     inc hl
+    ;; clear the old vmem position 
     ld a, (hl)
     or a, #0x00 ;; check if the prev vmem is valid
-    jr z, render_entity
     inc hl
+    jr nz, clear_prev_vmem
     ld a, (hl)
     or a, #0x00 ;; check if the prev vmem is valid
     jr z, render_entity
     ;; the vmem is valid clear it
+    clear_prev_vmem:
     ld d, (hl)
     dec hl
     ld e, (hl)
     ld a, #0x00
     ld (de), a
-    render_entity: ;; render entitie
-    ld de, #CPCT_VMEM_START_ASM
-    call cpct_getScreenPtr_asm
-    pop af
-    ld (hl), a 
+    ;; render entity 
+    render_entity:
     pop de
     push de
-    ld a, #0x5
-    add a, e
-    ld e, a
-    ld a, d
-    adc a, #0x00
-    ld d, a
+    ld a, (de)
+    and a, #E_TYPE_DEAD
+    jp nz, render_one_entity_end
+    ld de, #CPCT_VMEM_START_ASM
+    call cpct_getScreenPtr_asm
+    ;; render vmem position with entity color
+    pop de
+    push de
+    inc de
+    inc de
+    inc de
+    inc de
+    ld a, (de)
+    ld (hl), a
     ;; save low prev vmem ptr
+    ;; save high prev vmem ptr
+    pop de
+    push de
+    inc de
+    inc de
+    inc de
+    inc de
+    inc de
     ld a, l
     ld (de), a
-    ;; save high prev vmem ptr
     inc de
     ld a, h
     ld (de), a
+    render_one_entity_end:
     pop de
     ret
 
