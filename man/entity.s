@@ -52,7 +52,7 @@ man_entity_destroy: ;; should have in DE the entity ptr to be destory
     dec a
     ld (#entity_count), a
     ;; calculate the last entity position
-    ld hl, (next_free_entity) ;; load the last entity in HL
+    ld hl, (#next_free_entity) ;; load the last entity in HL
     ld a, l
     sub a, #ENTITY_SIZE
     ld l, a
@@ -68,6 +68,8 @@ man_entity_destroy: ;; should have in DE the entity ptr to be destory
     pop de ;; recover the entity position
     ;; invalid the last entity
     ld (hl), #E_TYPE_INVALID
+    ;; set next free entity
+    ld (#next_free_entity), hl
     pop af
     ret
 

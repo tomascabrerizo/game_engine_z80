@@ -17,16 +17,14 @@ sys_physics_update_one_entity: ;; update entity load in DE
     inc hl 
     inc hl 
     add a, (hl) ;; add to A the velocity in x
-    dec hl 
-    dec hl 
-    ld b, a
-    ld a, (hl)
-    sub a, b
+    push af
+    dec hl
+    dec hl
     and a, #0x80 ;; test if a is negative
     jr z, update_x 
     call man_entity_set4destruction
     update_x:
-    ld a, b
+    pop af
     ld (hl), a
     ret
 
