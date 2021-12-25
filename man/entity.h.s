@@ -14,6 +14,6 @@ E_TYPE_STAR    = 0x01
 E_TYPE_DEAD    = 0x80
 
 ;; create array for entities 
-ENTITY_SIZE = 7 ;; each entity use 7 bytes
-MAX_ENTITIES = 40 
+ENTITY_SIZE = 0x07 ;; each entity use 7 bytes
+MAX_ENTITIES = 40
 ENTITY_ARRAY_SIZE = ENTITY_SIZE * MAX_ENTITIES

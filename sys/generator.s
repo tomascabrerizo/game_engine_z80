@@ -12,7 +12,7 @@ default_gen_entity:
     .db 79 ;; pos x
     .db 1 ;; pos y
     .db -1 ;; velx
-    .db #0xF0 ;; color
+    .db #0xC0 ;; color
     .dw #0x0000
 
 

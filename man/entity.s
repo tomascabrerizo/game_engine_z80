@@ -7,6 +7,7 @@
 
 entities:
     .ds ENTITY_ARRAY_SIZE 
+aditional_zero:
     .db #0x00 ;; aditional zero byte at the end of the entity array
 next_free_entity:
     .dw #0x0000
@@ -135,3 +136,4 @@ man_entity_free_space: ;; return A with the amount of space
     ld b, a
     ld a, #MAX_ENTITIES
     sub a, b ;; the z bit is set if there is no space
+    ret
