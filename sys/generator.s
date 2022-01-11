@@ -12,9 +12,8 @@ default_gen_entity:
     .db 79 ;; pos x
     .db 1 ;; pos y
     .db -1 ;; velx
-    .db #0xC0 ;; color
+    .db #0xc0 ;; color
     .dw #0x0000
-
 
 generate_new_star: ;; generate a default star
     call man_entity_create
